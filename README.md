@@ -22,7 +22,8 @@ Unit tests:
 ```text
 make phpunit
 ```
-###PhpMyAdmin
+
+### PhpMyAdmin
 http://cart.local:81
-###App
+### App
 http://cart.local
