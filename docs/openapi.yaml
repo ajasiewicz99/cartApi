@@ -1,0 +1,197 @@
+openapi: 3.0.1
+info:
+  title: Cart Api
+  description: 'This is cart-api swagger documentation.'
+  version: 1.0.0
+servers:
+- url: http://cart.local/api/v1
+tags:
+- name: cart
+  description: Cart docs
+- name: health
+  description: HealthChecks
+
+paths:
+  /add-to-cart/{id}:
+    post:
+      parameters:
+          - in: path
+            name: id
+            schema:
+              type: integer
+            required: true
+            description: Numeric ID of the product
+      tags:
+      - cart
+      summary: Add new product(to cart) or create new cart
+      responses:
+        201:
+          description: Created
+          content: {}
+        404:
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Product not found.
+        405:
+          description: To many items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You cannot add more than 3 items to your cart!
+  /show-cart:
+    get:
+      tags:
+      - cart
+      summary: Show cart
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/cartList'
+        404:
+          description: Cart is Empty.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Cart is empty!
+  /remove/{id}:
+    delete:
+      tags:
+      - cart
+      summary: Remove from the cart.
+      parameters:
+          - in: path
+            name: id
+            schema:
+              type: integer
+            required: true
+            description: Numeric ID of the product
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Product removed from the cart!
+        400:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Product not found.
+        404:
+          description: Cart is Empty.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Cart is empty!
+  /_health:
+    get:
+      tags:
+      - health
+      summary: HealthCheck
+      description: Check if application works correctly
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/health'
+  /_info:
+    get:
+      tags:
+      - health
+      summary: HealthCheck.
+      description: Displays info.
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/healthInfo'
+components:
+  schemas:
+    healthInfo:
+      type: object
+      properties:
+        service:
+          type: string
+          example: lumen
+        memory_usage:
+          type: integer
+          example: 233333
+        cpu_usage:
+          type: number
+          example: 0.07
+    cartList:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            items:
+              type: object
+              properties:
+                1:
+                  type: object
+                  properties:
+                    qty:
+                      type: integer
+                      example: 1
+                    price:
+                      type: number
+                      example: 1.99
+                    item:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: Mais
+                        price:
+                          type: integer
+                          example: 1.99
+            totalQty:
+              type: integer
+              example: 1
+            totalPrice:
+              type: number
+              example: 1.99
+    health:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ok

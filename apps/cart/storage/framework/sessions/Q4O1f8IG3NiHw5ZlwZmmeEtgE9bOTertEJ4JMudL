@@ -1,0 +1,1 @@
+a:3:{s:6:"_token";s:40:"2lJO0oOA3G8nKe19QBDmpinhiA32VWspPNVeOqMc";s:4:"cart";O:24:"App\Lib\Cart\Models\Cart":3:{s:5:"items";a:1:{i:1;N;}s:8:"totalQty";i:2;s:10:"totalPrice";d:3.98;}s:6:"_flash";a:2:{s:3:"old";a:0:{}s:3:"new";a:0:{}}}
