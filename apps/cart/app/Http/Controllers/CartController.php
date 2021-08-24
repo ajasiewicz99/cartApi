@@ -4,7 +4,6 @@ use App\Lib\Cart\Cart;
 use App\Lib\Cart\CartException;
 use App\Models\Repositories\Interfaces\ProductInterface;
 use App\Models\Transformers\ResponseTransformer;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -37,12 +36,6 @@ class CartController extends Controller
             $data = $cart->add($product);
             $this->request->session()->put('cart', $data);
         }
-        catch (ModelNotFoundException $e) {
-            return ResponseTransformer::responseWithArray(
-                JsonResponse::HTTP_BAD_REQUEST,
-                ["message" => "Product not found."]
-            );
-        }
         catch (CartException $e) {
             return ResponseTransformer::responseWithArray(
                 JsonResponse::HTTP_METHOD_NOT_ALLOWED,
@@ -71,15 +64,7 @@ class CartController extends Controller
      */
     public function remove(int $id): JsonResponse
     {
-        try {
-            $product = $this->productRepo->findProductById($id);
-        } catch (ModelNotFoundException $e) {
-            return ResponseTransformer::responseWithArray(
-                JsonResponse::HTTP_BAD_REQUEST,
-                ['message' => 'Product not found.']
-            );
-        }
-
+        $product = $this->productRepo->findProductById($id);
         $cart = new Cart($this->request->session()->get('cart'));
         try {
             $data = $cart->remove($product);

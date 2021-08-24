@@ -58,6 +58,11 @@ class Handler extends ExceptionHandler
                 return ResponseTransformer::responseWithArray(JsonResponse::HTTP_METHOD_NOT_ALLOWED, []);
             case $exception instanceof NotFoundHttpException:
                 return ResponseTransformer::responseWithArray(JsonResponse::HTTP_NOT_FOUND, []);
+            case $exception instanceof ModelNotFoundException:
+                return ResponseTransformer::responseWithArray(
+                    JsonResponse::HTTP_BAD_REQUEST,
+                    ["message" => "Product not found."]
+                );
         }
         return parent::render($request, $exception);
     }
